@@ -15,6 +15,10 @@ export class User{
   @IsString()
   @Prop()
   password: string;
+
+  @ApiProperty({example: 'your refresh token'})
+  @Prop()
+  refreshTokenId: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

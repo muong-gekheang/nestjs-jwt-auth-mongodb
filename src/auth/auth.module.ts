@@ -6,18 +6,20 @@ import { JwtStrategy } from './jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UserSchema, User } from './schemas/user.schema';
+import { Session, SessionSchema } from './schemas/session.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: User.name, schema: UserSchema }
+      { name: User.name, schema: UserSchema },
+      { name: Session.name, schema: SessionSchema },
     ]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: process.env.JWT_SECRET,
-        signOptions: {expiresIn : '1h'},
+        secret: process.env.JWT_ACCESS_SECRET,
+        signOptions: { expiresIn : '10m' },
       }),
     }),
   ],
