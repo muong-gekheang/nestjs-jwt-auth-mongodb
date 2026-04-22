@@ -32,8 +32,11 @@ export class AuthService {
   async login(loginDto: LoginDto, req: any) {
     const parser = new (UAParser as any)(req.headers['user-agent']);
     const result = parser.getResult();
-    const ip = req.headers['x-forwarded-for']?.split(',')[0] ||
+    const rawIp =
+      req.headers['x-forwarded-for']?.split(',')[0] ||
       req.socket?.remoteAddress;
+
+    const ip = rawIp?.replace('::ffff:', '');
     const device = `${result.browser.name || 'Unknown'} on ${result.os.name || 'Unknown'}`;
     const user = await this.userModel.findOne({ username: loginDto.username });
 
